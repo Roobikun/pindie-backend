@@ -3,12 +3,16 @@ const fs = require("fs").promises;
 const readData = async url => {
   try {
     const data = await fs.readFile(url, "utf-8");
-    const json = JSON.parse(data);
-    return json;
+    return JSON.parse(data.toString());
   } catch (error) {
-    console.log(error);
+    if (error.name === "SyntaxError") {
+      console.error("Ошибка чтения JSON-файла", error);
+    } else {
+      console.log(error);
+    }
   }
 };
+
 
 const writeData = async (url, data) => {
   const json = JSON.stringify(data);

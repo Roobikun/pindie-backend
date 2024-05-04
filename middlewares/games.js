@@ -1,21 +1,13 @@
-const { readData } = require("../utils/data"); // Чтение и запись данных в JSON-файл
+// Файл middlewares/games.js
 
-const getAllGames = async (req, res, next) => {
-        // Читаем список игр из файла
-        const games = await readData("./data/games.json");
-        if (!games) {
-          res.status(400);
-          res.send({
-            status: "error",
-            message: "Нет игр в базе данных. Добавьте игру.",
-          });
-          return;
-        }
-        req.games = games;
-        next();
-}
+// Импортируем модель
+const games = require("../models/game");
 
+const findAllGames = async (req, res, next) => {
+  req.gamesArray = await games.find({}).populate("categories").populate("users");
+  next();
+  // console.log(req.gamesArray); вывод в терминал
+};
 
-module.exports = {
-    getAllGames
-}
+// Экспортируем функцию поиска всех игр
+module.exports = findAllGames;
