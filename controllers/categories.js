@@ -14,7 +14,7 @@ const sendCategoryCreated = (req, res) => {
 const sendCategoryById = (req, res) => {
   res.setHeader("Content-Type", "application/json");
   res.end(JSON.stringify(req.category));
-};
+}; 
 
 const sendCategoryUpdated = (req, res) => {
   res.setHeader("Content-Type", "application/json");
@@ -24,11 +24,13 @@ const sendCategoryUpdated = (req, res) => {
 const sendCategoryDeleted = (req, res) => {
   res.setHeader("Content-Type", "application/json");
   res.end(JSON.stringify(req.category));
-};
+}; 
 
 // Экспортируем контроллер
-module.exports = sendAllCategories;
-module.exports = sendCategoryCreated;
-module.exports = sendCategoryById;
-module.exports = sendCategoryUpdated;
-module.exports = sendCategoryDeleted;
+module.exports = {
+  sendAllCategories,
+  sendCategoryCreated,
+  sendCategoryById,
+  sendCategoryUpdated,
+  sendCategoryDeleted
+};

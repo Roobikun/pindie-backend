@@ -7,6 +7,8 @@ const findAllUsers = async (req, res, next) => {
   next();
 };
 
+
+
 const createUser = async (req, res, next) => {
   console.log("POST /users");
   try {
@@ -15,19 +17,20 @@ const createUser = async (req, res, next) => {
     next();
   } catch (error) {
     res.setHeader("Content-Type", "application/json");
-    res.status(400).send(JSON.stringify({ message: "Error creating users" }));
+        res.status(400).send(JSON.stringify({ message: "Ошибка создания пользователя" }));
   }
 };
 
 const findUserById = async (req, res, next) => {
+  console.log("GET /users/:id");
   try {
     req.user = await users.findById(req.params.id);
     next();
   } catch (error) {
     res.setHeader("Content-Type", "application/json");
-    res.status(404).send(JSON.stringify({ message: "User not found" }));
+        res.status(404).send(JSON.stringify({ message: "Пользователь не найдена" }));
   }
-};
+}; 
 
 const updateUser = async (req, res, next) => {
   try {
@@ -42,20 +45,54 @@ const updateUser = async (req, res, next) => {
 };
 
 const deleteUser = async (req, res, next) => {
+  console.log("DELETE /users/:id");
   try {
     req.user = await users.findByIdAndDelete(req.params.id);
     next();
   } catch (error) {
     res.setHeader("Content-Type", "application/json");
-    res
-      .status(400)
-      .send(JSON.stringify({ message: "Error deleting user" }));
+        res.status(400).send(JSON.stringify({ message: "Ошибка удаления пользователя" }));
   }
 };
 
+const checkEmptyNameAndEmailAndPassword = async (req, res, next) => {
+  if (!req.body.username || !req.body.email || !req.body.password) {
+    res.setHeader("Content-Type", "application/json");
+        res.status(400).send(JSON.stringify({ message: "Введите имя, email и пароль" }));
+  } else {
+    next();
+  }
+}; 
+
+const checkEmptyNameAndEmail = async (req, res, next) => {
+  if (!req.body.username || !req.body.email) {
+    res.setHeader("Content-Type", "application/json");
+        res.status(400).send(JSON.stringify({ message: "Введите имя и email" }));
+  } else {
+    next();
+  }
+}; 
+
+const checkIsUserExists = async (req, res, next) => {
+  const isInArray = req.usersArray.find((user) => {
+    return req.body.email === user.email;
+  });
+  if (isInArray) {
+    res.setHeader("Content-Type", "application/json");
+        res.status(400).send(JSON.stringify({ message: "Пользователь с таким email уже существует" }));
+  } else {
+    next();
+  }
+}; 
+
 // Экспортируем функцию поиска всех пользователей
-module.exports = findAllUsers;
-module.exports = createUser;
-module.exports = findUserById;
-module.exports = updateUser;
-module.exports = deleteUser;
+module.exports = {
+  findAllUsers,
+  createUser,
+  findUserById,
+  updateUser,
+  deleteUser,
+  checkEmptyNameAndEmailAndPassword,
+  checkEmptyNameAndEmail,
+  checkIsUserExists
+};

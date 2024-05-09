@@ -1,38 +1,52 @@
-  // Создаём роут для запросов категорий 
-  const categoriesRouter = require('express').Router();
-  
-  // Импортируем вспомогательные функции
-  const findAllCategories = require('../middlewares/categories');
-  const sendAllCategories = require('../controllers/categories');
-  const createCategory = require('../middlewares/categories');
-  const sendCategoryCreated = require('../controllers/categories');
-  const findCategoryById = require('../middlewares/categories');
-  const sendCategoryById = require('../controllers/categories');
-  const updateCategory = require('../middlewares/categories');
-  const sendCategoryUpdated = require('../controllers/categories');
-  const deleteCategory = require('../middlewares/categories');
-  const sendCategoryDeleted = require('../controllers/categories');
-  
-  
-  
-  // Обрабатываем GET-запрос с роутом '/categories'
-  categoriesRouter.get('/categories', findAllCategories, sendAllCategories);
-  
-  // Обрабатываем POST-запрос с роутом '/categories'
-  categoriesRouter.post('/categories', findAllCategories, createCategory, sendCategoryCreated);
+// Файл routes/categories.js
 
-  // Обрабатываем GET-запрос с роутом '/categories/:id'
-  categoriesRouter.get('/categories/:id', findCategoryById, sendCategoryById);
-  
-  categoriesRouter.put(
-    "/categories/:id", // Слушаем запросы по эндпоинту
-    updateCategory, // Обновляем запись в MongoDB
-    sendCategoryUpdated // Возвращаем ответ на клиент
-  ); 
+const categoriesRouter = require("express").Router();
 
+// Импортируем вспомогательные функции и контроллеры
+const {
+  findAllCategories,
+  createCategory,
+  findCategoryById,
+  updateCategory,
+  deleteCategory,
+  checkEmptyName,
+  checkIsCategoryExists,
+} = require("../middlewares/categories");
 
-  categoriesRouter.delete("/categories/:id", deleteCategory, sendCategoryDeleted);
+const {
+  sendAllCategories,
+  sendCategoryCreated,
+  sendCategoryById,
+  sendCategoryUpdated,
+  sendCategoryDeleted,
+} = require("../controllers/categories");
 
-  // Экспортируем роут для использования в приложении — app.js
-  module.exports = categoriesRouter;
-  
+// Обрабатываем GET-запрос с роутом '/categories'
+categoriesRouter.get("/categories", findAllCategories, sendAllCategories);
+
+// Обрабатываем POST-запрос с роутом '/categories'
+categoriesRouter.post(
+  "/categories",
+  findAllCategories,
+  checkIsCategoryExists,
+  checkEmptyName,
+  createCategory,
+  sendCategoryCreated
+);
+
+// Обрабатываем GET-запрос с роутом '/categories/:id'
+categoriesRouter.get("/categories/:id", findCategoryById, sendCategoryById);
+
+// Обрабатываем PUT-запрос с роутом '/categories/:id'
+categoriesRouter.put(
+  "/categories/:id",
+  checkEmptyName,
+  updateCategory,
+  sendCategoryUpdated
+);
+
+// Обрабатываем DELETE-запрос с роутом '/categories/:id'
+categoriesRouter.delete("/categories/:id", deleteCategory, sendCategoryDeleted);
+
+// Экспортируем роут для использования в приложении — app.js
+module.exports = categoriesRouter;
