@@ -10,6 +10,8 @@ const findUserById = require("../middlewares/users");
 const sendUserById = require("../controllers/users");
 const updateUser = require("../middlewares/users");
 const sendUserUpdated = require("../controllers/users");
+const deleteUser = require("../middlewares/users");
+const sendUserDeleted = require("../controllers/users");
 
 // Обрабатываем GET-запрос с роутом '/users'
 usersRouter.get("/users", findAllusers, sendAllusers); //usersRouter.get('/users', findAllusers, sendAllusers);
@@ -25,6 +27,8 @@ usersRouter.put(
   updateUser, // Обновляем запись в MongoDB
   sendUserUpdated // Возвращаем ответ на клиент
 ); 
+
+usersRouter.delete("/users/:id", deleteUser, sendUserDeleted);
 
 // Экспортируем роут для использования в приложении — app.js
 module.exports = usersRouter;

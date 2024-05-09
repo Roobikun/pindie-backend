@@ -10,6 +10,9 @@
   const sendCategoryById = require('../controllers/categories');
   const updateCategory = require('../middlewares/categories');
   const sendCategoryUpdated = require('../controllers/categories');
+  const deleteCategory = require('../middlewares/categories');
+  const sendCategoryDeleted = require('../controllers/categories');
+  
   
   
   // Обрабатываем GET-запрос с роутом '/categories'
@@ -26,6 +29,9 @@
     updateCategory, // Обновляем запись в MongoDB
     sendCategoryUpdated // Возвращаем ответ на клиент
   ); 
+
+
+  categoriesRouter.delete("/categories/:id", deleteCategory, sendCategoryDeleted);
 
   // Экспортируем роут для использования в приложении — app.js
   module.exports = categoriesRouter;

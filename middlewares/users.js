@@ -41,8 +41,21 @@ const updateUser = async (req, res, next) => {
   }
 };
 
+const deleteUser = async (req, res, next) => {
+  try {
+    req.user = await users.findByIdAndDelete(req.params.id);
+    next();
+  } catch (error) {
+    res.setHeader("Content-Type", "application/json");
+    res
+      .status(400)
+      .send(JSON.stringify({ message: "Error deleting user" }));
+  }
+};
+
 // Экспортируем функцию поиска всех пользователей
 module.exports = findAllUsers;
 module.exports = createUser;
 module.exports = findUserById;
 module.exports = updateUser;
+module.exports = deleteUser;

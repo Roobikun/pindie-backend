@@ -21,8 +21,14 @@ const sendCategoryUpdated = (req, res) => {
   res.status(200).send(JSON.stringify({ message: "Категория обновлена" }));
 };
 
+const sendCategoryDeleted = (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.end(JSON.stringify(req.category));
+};
+
 // Экспортируем контроллер
 module.exports = sendAllCategories;
 module.exports = sendCategoryCreated;
 module.exports = sendCategoryById;
 module.exports = sendCategoryUpdated;
+module.exports = sendCategoryDeleted;
