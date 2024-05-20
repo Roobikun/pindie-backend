@@ -13,6 +13,7 @@ const {
   checkIfUsersAreSafe,
   checkIfCategoriesAvailable,
   checkIsGameExists,
+  checkIsVoteRequest,
 } = require("../middlewares/games");
 
 // Импортируем контроллер
@@ -48,6 +49,7 @@ gamesRouter.post(
 gamesRouter.put(
   "/games/:id",
   findGameById,
+  checkIsVoteRequest,
   checkIfUsersAreSafe,
   checkIfCategoriesAvailable,
   checkEmptyFields,

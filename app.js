@@ -14,7 +14,7 @@ const pagesRouter = require("./routes/pages");
 
 const cookieParser = require("cookie-parser");
 
-const PORT = 3000;
+const PORT = 3001;
 const app = express();
 
 connectToDatabase();
@@ -27,9 +27,6 @@ app.use(
   pagesRouter,
   apiRouter,
   express.static(path.join(__dirname, "public")),
-  // usersRouter, 
-  // categoriesRouter,
-  // gamesRouter
 );
 
 
