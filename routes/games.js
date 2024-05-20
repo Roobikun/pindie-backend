@@ -24,7 +24,7 @@ const {
   sendGameDeleted,
 } = require("../controllers/games");
 
-// Устанавливаем обработчики маршрутов
+const { checkAuth } = require("../middlewares/auth.js");
 
 // Получение всех игр
 gamesRouter.get("/games", findAllGames, sendAllGames);
@@ -39,6 +39,7 @@ gamesRouter.post(
   checkIsGameExists,
   checkIfCategoriesAvailable,
   checkEmptyFields,
+  checkAuth,
   createGame,
   sendGameCreated
 );
@@ -50,11 +51,12 @@ gamesRouter.put(
   checkIfUsersAreSafe,
   checkIfCategoriesAvailable,
   checkEmptyFields,
+  checkAuth,
   updateGame,
   sendGameUpdated
 );
 
 // Удаление игры
-gamesRouter.delete("/games/:id", deleteGame, sendGameDeleted);
+gamesRouter.delete("/games/:id", checkAuth, deleteGame, sendGameDeleted);
 
 module.exports = gamesRouter;

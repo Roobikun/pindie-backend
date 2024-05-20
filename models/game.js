@@ -1,7 +1,6 @@
-const mongoose = require('mongoose');
-// Не забываем импортировать модель, на которую ссылаемся
-const userModel = require('./user');
-const categoryModel = require('./category');
+const mongoose = require("mongoose");
+const userModel = require("./user");
+const categoryModel = require("./category");
 
 const gameSchema = new mongoose.Schema({
   title: {
@@ -14,26 +13,47 @@ const gameSchema = new mongoose.Schema({
   },
   developer: {
     type: String,
-    required: true
+    required: true,
   },
   image: {
     type: String,
-    required: true
+    required: true,
   },
   link: {
     type: String,
-    required: true
+    required: true,
   },
   // Добавляем поле для списка пользователей
-  users: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: userModel,
-  }],
+  users: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: userModel,
+    },
+  ],
   // Добавляем поле для списка категорий
-  categories: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: categoryModel,
-  }],
+  categories: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: categoryModel,
+    },
+  ],
 });
 
-module.exports = mongoose.model('game', gameSchema);
+// Добавим метод для поиска игр по категории 
+gameSchema.statics.findGameByCategory = function(category) {
+  return this.find({}) // Выполним поиск всех игр
+    .populate({
+      path: "categories",
+      match: { name: category } 
+    })
+    .populate({
+      path: "users",
+      select: "-password"
+    })
+    .then(games => {
+        // Отфильтруем по наличию искомой категории 
+      return games.filter(game => game.categories.length > 0);
+    });
+}; 
+
+module.exports = mongoose.model("game", gameSchema);
