@@ -1,6 +1,6 @@
 const allowedCors = [
-  "roobi-frontend.nomoredomainswork.ru",
-  "roobi-backend.nomoredomainswork.ru",  
+  "https://roobi-frontend.nomoredomainswork.ru",
+  "https://roobi-backend.nomoredomainswork.ru",  
   "http://localhost:3000",
   "http://localhost:3001",
 ];
